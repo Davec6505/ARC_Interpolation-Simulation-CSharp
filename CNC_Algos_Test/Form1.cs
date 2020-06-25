@@ -140,8 +140,8 @@ namespace CNC_Algos_Test
 
             g.DrawLine(grid, 350, 0, 350, 700);
             g.DrawLine(grid, 0, 350, 700, 350);
-            g.DrawLine(p2, crd.XS, crd.YS, crd.XS + 2, crd.YS + 2);
-            g.DrawLine(p, (int)crd.XFinnish, (int)crd.YFinnish, (int)crd.XFinnish +2, (int)crd.YFinnish+2);// crd.XC, crd.YC);
+            g.DrawLine(p2, crd.XS, crd.YS, crd.XS + 1, crd.YS + 1);
+            g.DrawLine(p, (int)crd.XFinnish, (int)crd.YFinnish, (int)crd.XFinnish +1, (int)crd.YFinnish+1);// crd.XC, crd.YC);
         }
     }
 }
