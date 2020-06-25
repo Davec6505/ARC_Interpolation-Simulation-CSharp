@@ -8,3 +8,13 @@ C:\Users\davec\source\repos\CNC_Algos_Test\CNC_Algos_Test\CNC_Algos_Test\obj\Deb
 C:\Users\davec\source\repos\CNC_Algos_Test\CNC_Algos_Test\CNC_Algos_Test\obj\Debug\CNC_Algos_Test.csproj.CoreCompileInputs.cache
 C:\Users\davec\source\repos\CNC_Algos_Test\CNC_Algos_Test\CNC_Algos_Test\obj\Debug\CNC_Algos_Test.exe
 C:\Users\davec\source\repos\CNC_Algos_Test\CNC_Algos_Test\CNC_Algos_Test\obj\Debug\CNC_Algos_Test.pdb
+C:\Users\GIT\ARC_Interpolation-Simulation-CSharp\ARC_Interpolation-Simulation-CSharp\CNC_Algos_Test\bin\Debug\CNC_Algos_Test.exe.config
+C:\Users\GIT\ARC_Interpolation-Simulation-CSharp\ARC_Interpolation-Simulation-CSharp\CNC_Algos_Test\bin\Debug\CNC_Algos_Test.exe
+C:\Users\GIT\ARC_Interpolation-Simulation-CSharp\ARC_Interpolation-Simulation-CSharp\CNC_Algos_Test\bin\Debug\CNC_Algos_Test.pdb
+C:\Users\GIT\ARC_Interpolation-Simulation-CSharp\ARC_Interpolation-Simulation-CSharp\CNC_Algos_Test\obj\Debug\CNC_Algos_Test.csprojAssemblyReference.cache
+C:\Users\GIT\ARC_Interpolation-Simulation-CSharp\ARC_Interpolation-Simulation-CSharp\CNC_Algos_Test\obj\Debug\CNC_Algos_Test.Form1.resources
+C:\Users\GIT\ARC_Interpolation-Simulation-CSharp\ARC_Interpolation-Simulation-CSharp\CNC_Algos_Test\obj\Debug\CNC_Algos_Test.Properties.Resources.resources
+C:\Users\GIT\ARC_Interpolation-Simulation-CSharp\ARC_Interpolation-Simulation-CSharp\CNC_Algos_Test\obj\Debug\CNC_Algos_Test.csproj.GenerateResource.cache
+C:\Users\GIT\ARC_Interpolation-Simulation-CSharp\ARC_Interpolation-Simulation-CSharp\CNC_Algos_Test\obj\Debug\CNC_Algos_Test.csproj.CoreCompileInputs.cache
+C:\Users\GIT\ARC_Interpolation-Simulation-CSharp\ARC_Interpolation-Simulation-CSharp\CNC_Algos_Test\obj\Debug\CNC_Algos_Test.exe
+C:\Users\GIT\ARC_Interpolation-Simulation-CSharp\ARC_Interpolation-Simulation-CSharp\CNC_Algos_Test\obj\Debug\CNC_Algos_Test.pdb
