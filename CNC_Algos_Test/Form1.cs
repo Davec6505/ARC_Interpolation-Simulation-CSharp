@@ -28,6 +28,7 @@ namespace CNC_Algos_Test
         private double deg_ = 0;
         private double divisor = 0.00;
         private double newDeg = 0.00;
+        private int timer1_interval = 10;
         public Form1()
         {
             InitializeComponent();
@@ -41,34 +42,71 @@ namespace CNC_Algos_Test
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ValuesToUse()
         {
-
-
+            double temp = 0.00;
+            int t1_temp = 0;
+            Result_rTb.Clear();
             crd.Dir = Dir_textBox.Text;
 
-            crd.XStart = double.Parse(XStart_textBox.Text);
-            crd.YStart = double.Parse(Ystart_textBox.Text);
+            if (double.TryParse(XStart_textBox.Text,out temp))
+                crd.XStart = temp;
+            if (double.TryParse(Ystart_textBox.Text, out temp))
+                crd.YStart = temp;
+            if (double.TryParse(I_textBox.Text, out temp))
+                crd.I = temp;
+            if (double.TryParse(J_textBox.Text, out temp))
+                crd.J = temp;
+            if (double.TryParse(Deg_textBox.Text, out temp))
+                crd.deg = temp;
+            if (int.TryParse(Timer_tBox.Text, out t1_temp))
+                timer1_interval = t1_temp;
 
-            crd.I = double.Parse(I_textBox.Text);
-            crd.J = double.Parse(J_textBox.Text);
-            crd.deg = double.Parse(Deg_textBox.Text);
-            deg_ = crd.deg;
+            tmr1.Interval = timer1_interval;
+
+        }
+
+        private void CalcValues()
+        {
             crd.CalcRadius();
+            crd.CalcCenter();
+            crd.angleStart    = crd.CalcAngle(crd.X, crd.Y);
+            crd.QuadrantStart = crd.GetQuadrantA(crd.I,crd.J);
+            crd.CalcStep();
+            crd.GetNextStep();
+            crd.Calc_I_J_End();
+            crd.QuadrantFin   = crd.GetQuadrantA(crd.I_end, crd.J_end);
+            crd.angleEnd      = crd.CalcAngle(crd.I_end, crd.J_end);
+            Console.WriteLine($"< Radius {crd.Radius} : xCen {crd.xCenter} : yCen {crd.yCenter} " +
+                              $"qStart {crd.QuadrantStart} : qEnd {crd.QuadrantFin} : Iend {crd.I_end} : Jend {crd.J_end} : angS {crd.angleStart} : " +
+                              $"angEnd {crd.angleEnd} >");
+        }
 
+        private void btnCalcRadii_Click(object sender, EventArgs e)
+        {
+
+            ValuesToUse();
+            CalcValues();
+            CalcDivisor();
             xFin = (int)crd.XFinnish;
             yFin = (int)crd.YFinnish;
+            WriteToTextBoxes();
+        }
+
+        private void WriteToTextBoxes()
+        {
             Xfinnish_textBox.Text = xFin.ToString();
             Yfinnish_textBox.Text = yFin.ToString();
-
             Q_textBox.Text = crd.QuadrantStart.ToString();
             QFtextBox.Text = crd.QuadrantFin.ToString();
             Radius_textBox.Text = crd.Radius.ToString();
-            N_textBox1.Text = crd.N.ToString();
             X0textBox.Text = crd.x0.ToString();
             Y0textBox.Text = crd.y0.ToString();
+            N_textBox1.Text = divisor.ToString();
+        }
 
-          
+        private void CalcDivisor()
+        {
             if (crd.Dir == "G02")
             {
                 newDeg = 360 / crd.deg;
@@ -81,11 +119,56 @@ namespace CNC_Algos_Test
                 crd.N = ((2 * Math.PI * crd.Radius) / newDeg);
                 divisor = crd.deg / crd.N;
             }
-
-            Debug.WriteLine($"divisor:= {divisor}");
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        double tempX_I, tempY_J, degA,degB,degT;
+
+
+
+        private void butCalDeg_Click(object sender, EventArgs e)
+        {
+            double temp = 0.00;
+            ValuesToUse();
+            //get initial angle from current position to radius center
+
+            Radius_textBox.Text = crd.Radius.ToString();
+
+            if (double.TryParse(Xfinnish_textBox.Text, out temp))
+                crd.XFinnish = temp;
+            if (double.TryParse(Yfinnish_textBox.Text, out temp))
+                crd.YFinnish = temp;
+
+            CalcValues();
+            CalcDivisor();
+            degT = TestQuadrnt();
+            WriteToTextBoxes();
+
+            Console.WriteLine( crd.angleStart.ToString() + " : " + crd.angleEnd.ToString() + " : " + degT.ToString());
+            Deg_textBox.Text = crd.deg.ToString();
+
+        }
+
+        private double TestQuadrnt()
+        {
+            double totalDeg = 0.00;
+
+            if (crd.I_end < 0)
+            {
+                crd.angleEnd = 180.0 - crd.angleEnd;
+                totalDeg = Math.Abs(crd.angleStart) + Math.Abs(crd.angleEnd);
+            }
+            else if (crd.I_end > 0)
+            {
+                crd.angleEnd = 180.0 - crd.angleEnd;
+                totalDeg = Math.Abs(crd.angleStart) + 180.0 + Math.Abs(crd.angleEnd);
+            }
+            else
+                totalDeg = Math.Abs(crd.angleStart) + 180.0 + Math.Abs(crd.angleEnd);
+
+            return totalDeg;
+        }
+
+        private void btnRun_Click(object sender, EventArgs e)
         {
             DrawArea = new Bitmap(PicBx.Size.Width, PicBx.Size.Height);
 
@@ -93,13 +176,17 @@ namespace CNC_Algos_Test
             if(crd.Dir == "G02")
             {
                 degree = 0;
-                crd.deg = degree;
+                //crd.deg = degree;
+                deg_ = crd.deg;
+                Console.WriteLine("G02 " + deg_);
             }
 
             if (crd.Dir == "G03")
             {
                 degree = 360;
-                crd.deg = degree;
+                //crd.deg = degree;
+                deg_ = 360.0 - crd.deg;
+                Console.WriteLine("G03 " + deg_);
             }
                 tmr1.Start();
         }
@@ -127,7 +214,8 @@ namespace CNC_Algos_Test
 
 
             crd.deg = degree;
-            crd.CalcRadius();
+            crd.CalcStep();
+            crd.GetNextStep();
             Draw();
         }
 
@@ -142,6 +230,18 @@ namespace CNC_Algos_Test
             g.DrawLine(grid, 0, 350, 700, 350);
             g.DrawLine(p2, crd.XS, crd.YS, crd.XS + 1, crd.YS + 1);
             g.DrawLine(p, (int)crd.XFinnish, (int)crd.YFinnish, (int)crd.XFinnish +1, (int)crd.YFinnish+1);// crd.XC, crd.YC);
+            Result_rTb.AppendText(crd.XFinnish + " : " + crd.YFinnish + " : " + deg_ + " : " + degree + Environment.NewLine);
+            Result_rTb.ScrollToCaret();
+        }
+
+
+        private void PicBx_MouseUp(object sender, MouseEventArgs e)
+        {
+            int x = 0;
+            int y = 0;
+            x = e.X;
+            y = e.Y;
+            tbXYMousePos.Text = x.ToString() + ":" + y.ToString();
         }
     }
 }

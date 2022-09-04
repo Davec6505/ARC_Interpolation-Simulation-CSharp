@@ -7,14 +7,19 @@ using System.Threading.Tasks;
 
 namespace CNC_Algos_Test
 {
+
     class Cords
     {
+        Func<double, double, int> Quad;// = GetQuadrant;
+
         public double XStart { get; set; }
         public double YStart { get; set; }
         public double XFinnish { get; set; }
         public double YFinnish { get; set; }
         public double I { get; set; }
         public double J { get; set; }
+        public double I_end{ get; set; }
+        public double J_end { get; set; }
         public double Radius { get; set; }
         public double N { get; set; }
         public int QuadrantStart { get; set; }
@@ -31,104 +36,121 @@ namespace CNC_Algos_Test
         public double deg { get; set; }
         public double degRad { get; set; }
         public double angleB { get; set; }
+        public double angleStart { get; set; }
+        public double angleEnd { get; set; }
+        public double angleTotal { get; set; }
         public double angleBRad { get; set; }
+
+        public double deg2rad = 0.0;// Math.PI / 180; // 1radians = 180/pi  || 1deg = pi/180
+        public double rad2deg = 0.0;//180.0 / Math.PI;
+        public double X, Y, xF, yF, xCenter, yCenter, xRad, yRad, degOffSet;
 
         public Cords()
         {
-
+            deg2rad = Math.PI / 180; // 1radians = 180/pi  || 1deg = pi/180
+            rad2deg = 180.0 / Math.PI;
         }
 
-        double X, Y, xF, yF, xR, yR, xRad, yRad, degOffSet;
         public void CalcRadius()
         {
-            Func<double, double, int> Quad =  GetQuadrant;
-            int arg1, arg2;
-            double deg2rad = Math.PI / 180; // 1radians = 180/pi  || 1deg = pi/180
-            double rad2deg = 180.0 / Math.PI;
-            double Rt2 = Math.Sqrt(2);
-
-            XS = (int)XStart;
-            YS = (int)YStart;
-
-            //get the offset of the angle from 90 deg
-  
-            xR = XStart + I;
-            yR = YStart + J;
-
-            XC = (int)xR;
-            YC = (int)yR;
-
             X = Math.Abs(I);
             Y = Math.Abs(J);
-            Radius = Math.Sqrt((X * X) + (Y * Y));
-
-            //find which quadrant the arc starts in
-            QuadrantStart = Quad( I, J);
-
-            //get the angle from the x axis
-            angleA = Math.Atan2(Y,X);
-            angleAdeg = angleA * rad2deg;
-
-     
-                if (QuadrantStart == 1 || QuadrantStart == 3)
-                    angleB = deg - angleAdeg;
-
-                if (QuadrantStart == 2 || QuadrantStart == 4)
-                    angleB = deg + angleAdeg;
-            
-
-           
-
-            angleBRad = angleB * deg2rad;
-
-            //get the xFin and yFin values
-  
-                if (QuadrantStart == 1 || QuadrantStart == 4)
-                {
-                    XFinnish = xR + (Radius * Math.Cos(angleBRad));
-                    YFinnish = yR + (Radius * Math.Sin(angleBRad));//
-                }
-                if (QuadrantStart == 2 || QuadrantStart == 3)
-                {
-                    XFinnish = xR - (Radius * Math.Cos(angleBRad));
-                    YFinnish = yR - (Radius * Math.Sin(angleBRad));//
-                }
-
-
-
-
-            //calculate N value
-        
-          //  N = 2 * Math.PI * Radius;//(XFinnish - XStart) + ( YFinnish - YStart);
-
-            //Debug write section for visualisation of variables
-            Debug.WriteLine($"QuadrantStart:= {QuadrantStart}");
-            Debug.WriteLine($"deg:= {deg};  angleAdeg:= {angleAdeg};   angleB:= {angleB}");
-            Debug.WriteLine($"xR:= {xR};  yR:= {yR};  X:= {X};  Y:= {Y}");
-            Debug.WriteLine($"Radius:= {Radius}; angleBRad:= {angleBRad}");
-            Debug.WriteLine($"xF:= {XFinnish}; yF:= {YFinnish}");
-
+            Radius = Math.Sqrt((X*X) + (Y*Y) );
         }
 
-        public int GetQuadrant(double i, double j)
+        public void CalcCenter()
         {
-            if ((i <= 0) && (j >= 0))
+            xCenter = XStart + I;
+            yCenter = YStart + J;
+
+            XC = (int)xCenter;
+            YC = (int)yCenter;
+        }
+
+
+        public void Calc_I_J_End()
+        {
+            I_end = XFinnish - xCenter;
+            J_end = YFinnish - yCenter;
+        }
+
+        public double CalcAngle(double x,double y)
+        {
+            
+            angleA =  Math.Atan2(Math.Abs(y), Math.Abs(x));
+            return angleA * rad2deg;
+        }
+
+        public int GetQuadrantA(double i, double j)
+        {
+            if ((i < 0) && (j >= 0))
                 return 1;
-            else if ((i > 0) && (j > 0))
+            else if ((i >= 0) && (j >= 0))
                 return 2;
-            else if ((i > 0) && (j < 0))
+            else if ((i >= 0) && (j < 0))
                 return 3;
             else if ((i < 0) && (j < 0))
                 return 4;
             else return 0;
-         
+
+        }
+        public int GetQuadrantB(double i, double j)
+        {
+            if ((i >= 0) && (j >= 0))
+                return 1;
+            else if ((i >= 0) && (j < 0))
+                return 2;
+            else if ((i < 0) && (j < 0))
+                return 3;
+            else if ((i < 0) && (j >= 0))
+                return 4;
+            else return 0;
+
         }
 
-        public void GetOppAdj(out int arg1, out int arg2)
+
+        /// <summary>
+        /// Calculate the Steps to move
+        /// </summary>
+
+        public void CalcStep()
         {
-              arg1 = (int)Math.Sqrt((Radius * Radius) - (xR * xR));
-              arg2 = (int)Math.Sqrt((Radius * Radius) - (yR * yR));
+
+            if (QuadrantStart == 1 || QuadrantStart == 3)
+                angleB = deg - angleStart;
+
+            if (QuadrantStart == 2 || QuadrantStart == 4)
+                angleB = deg + angleStart;
+
+            angleBRad = angleB * deg2rad;
+
+            //get the xFin and yFin values
+            //calculate N value       
+            //  N = 2 * Math.PI * Radius;//(XFinnish - XStart) + ( YFinnish - YStart);
+
+            //Debug write section for visualisation of variables
+         /*   Debug.WriteLine($"QuadrantStart:= {QuadrantStart}");
+            Debug.WriteLine($"deg:= {deg};  angleAdeg:= {angleAdeg};   angleB:= {angleB}");
+            Debug.WriteLine($"xCenter:= {xCenter};  yCenter:= {yCenter};  X:= {X};  Y:= {Y}");
+            Debug.WriteLine($"Radius:= {Radius}; angleBRad:= {angleBRad}");
+            Debug.WriteLine($"xF:= {XFinnish}; yF:= {YFinnish}");
+         */
         }
+
+        public void GetNextStep()
+        {
+            if (QuadrantStart == 1 || QuadrantStart == 4)
+            {
+                XFinnish = xCenter + (Radius * Math.Cos(angleBRad));
+                YFinnish = yCenter + (Radius * Math.Sin(angleBRad));//
+            }
+            if (QuadrantStart == 2 || QuadrantStart == 3)
+            {
+                XFinnish = xCenter - (Radius * Math.Cos(angleBRad));
+                YFinnish = yCenter - (Radius * Math.Sin(angleBRad));//
+            }
+        }
+
     }
 }
 /*
