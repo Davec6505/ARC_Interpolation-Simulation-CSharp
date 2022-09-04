@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define WriteBebug
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 namespace CNC_Algos_Test
 {
 
-    class Cords
+    class Cords:Conversion
     {
         Func<double, double, int> Quad;// = GetQuadrant;
 
@@ -124,17 +126,14 @@ namespace CNC_Algos_Test
 
             angleBRad = angleB * deg2rad;
 
-            //get the xFin and yFin values
-            //calculate N value       
-            //  N = 2 * Math.PI * Radius;//(XFinnish - XStart) + ( YFinnish - YStart);
-
+#if WriteBebug
             //Debug write section for visualisation of variables
-         /*   Debug.WriteLine($"QuadrantStart:= {QuadrantStart}");
+            Debug.WriteLine($"QuadrantStart:= {QuadrantStart}");
             Debug.WriteLine($"deg:= {deg};  angleAdeg:= {angleAdeg};   angleB:= {angleB}");
             Debug.WriteLine($"xCenter:= {xCenter};  yCenter:= {yCenter};  X:= {X};  Y:= {Y}");
             Debug.WriteLine($"Radius:= {Radius}; angleBRad:= {angleBRad}");
             Debug.WriteLine($"xF:= {XFinnish}; yF:= {YFinnish}");
-         */
+#endif
         }
 
         public void GetNextStep()
@@ -153,22 +152,3 @@ namespace CNC_Algos_Test
 
     }
 }
-/*
- *             x0 =  (int)(XFinnish - XStart);
-            y0 =  (int)(YFinnish - YStart);
-            Debug.WriteLine($"[x0:y0] = [{x0}:{y0}]");
-            QuadrantStart = GetQuadrant(x0, y0);
-            if (I == J) Radius = I * Rt2;
-            if (I == 0) Radius = J;
-            if (J == 0) Radius = I;
-            if ((I > 0) && (J > 0) && (I != J)) Radius = Math.Sqrt((I * I) + (J * J));
-
-            XS = (int)XStart;
-            YS = (int)YStart;
-
-            XC = XS + (int)I;
-            YC = YS + (int)J;
-            QuadrantFin = GetQuadrant((int)XFinnish, (int)YFinnish);
-            N = (int)((XStart - XFinnish) + (YStart - YFinnish));
-   
-*/

@@ -28,7 +28,9 @@ namespace CNC_Algos_Test
         private double deg_ = 0;
         private double divisor = 0.00;
         private double newDeg = 0.00;
+        private double inch_mm = 0.0393701;
         private int timer1_interval = 10;
+
         public Form1()
         {
             InitializeComponent();
@@ -39,7 +41,6 @@ namespace CNC_Algos_Test
 
             crd = new Cords();
             tmr1.Interval = 10;
-
         }
 
         private void ValuesToUse()

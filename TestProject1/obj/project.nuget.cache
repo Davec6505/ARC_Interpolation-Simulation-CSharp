@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "UEVvxnGic0YUmVAxbRVMU3kj049cHX06pn7Luv8QodNqLVv2zdAXrHLM28E0PCuIl1K4F3XKf+uP5RtSkxEk9A==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Git\\ARC_Interpolation-Simulation-CSharp\\TestProject1\\TestProject1.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\cfan\\.nuget\\packages\\microsoft.codecoverage\\16.5.0\\microsoft.codecoverage.16.5.0.nupkg.sha512",
+    "C:\\Users\\cfan\\.nuget\\packages\\microsoft.net.test.sdk\\16.5.0\\microsoft.net.test.sdk.16.5.0.nupkg.sha512",
+    "C:\\Users\\cfan\\.nuget\\packages\\nunit\\3.12.0\\nunit.3.12.0.nupkg.sha512",
+    "C:\\Users\\cfan\\.nuget\\packages\\nunit3testadapter\\3.16.1\\nunit3testadapter.3.16.1.nupkg.sha512"
+  ],
+  "logs": []
+}
