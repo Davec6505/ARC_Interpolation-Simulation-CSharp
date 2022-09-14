@@ -10,12 +10,19 @@ namespace CNC_Algos_Test
     {
         public double In2mm(double v)
         {
-            double res = v / 0.0393;
-
-            if (res < 0.001)
+            if (v < 0.001)
                 throw new Exception("Argument is not in mm");
+            
+            return v / 0.0393;
 
-            return res;
+        }
+
+        public double mm2In(double v)
+        {
+            if(v < 0.001)
+              throw new Exception("Argument is to small");
+            
+            return v * 0.0393;
         }
     }
 }

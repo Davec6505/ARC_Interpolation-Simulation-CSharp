@@ -20,5 +20,14 @@ namespace TestProject1
             Assert.GreaterOrEqual(result, 0.001);
             //Assert.Throws<System.NotImplementedException>(() => conv.In2mm(1.25));
         }
+
+        [Test]
+        public void ConvertmmToinch_Inputismm_ChecksEquality()
+        {
+            double res = conv.mm2In(1.25);
+
+            Assert.AreEqual(0.049125, res);
+            //Assert.Throws<System.NotImplementedException>(() => conv.mm2In(1.25));
+        }
     }
 }

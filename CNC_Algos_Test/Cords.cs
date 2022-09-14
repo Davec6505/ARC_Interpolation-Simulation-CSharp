@@ -76,10 +76,10 @@ namespace CNC_Algos_Test
             J_end = YFinnish - yCenter;
         }
 
-        public double CalcAngle(double x,double y)
+        public double CalcAngle(double i,double j)
         {
             
-            angleA =  Math.Atan2(Math.Abs(y), Math.Abs(x));
+            angleA =  Math.Atan2(j, i);
             return angleA * rad2deg;
         }
 

@@ -38,7 +38,7 @@ namespace CNC_Algos_Test
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            Result_rTb.SelectionTabs = new int[] { 2, 2, 1, 2 };
             crd = new Cords();
             tmr1.Interval = 10;
         }
@@ -73,11 +73,11 @@ namespace CNC_Algos_Test
             crd.CalcCenter();
             crd.angleStart    = crd.CalcAngle(crd.X, crd.Y);
             crd.QuadrantStart = crd.GetQuadrantA(crd.I,crd.J);
-            crd.CalcStep();
-            crd.GetNextStep();
             crd.Calc_I_J_End();
             crd.QuadrantFin   = crd.GetQuadrantA(crd.I_end, crd.J_end);
             crd.angleEnd      = crd.CalcAngle(crd.I_end, crd.J_end);
+            crd.CalcStep();
+            crd.GetNextStep();
             Console.WriteLine($"< Radius {crd.Radius} : xCen {crd.xCenter} : yCen {crd.yCenter} " +
                               $"qStart {crd.QuadrantStart} : qEnd {crd.QuadrantFin} : Iend {crd.I_end} : Jend {crd.J_end} : angS {crd.angleStart} : " +
                               $"angEnd {crd.angleEnd} >");
@@ -153,19 +153,29 @@ namespace CNC_Algos_Test
         {
             double totalDeg = 0.00;
 
-            if (crd.I_end < 0)
+            if (crd.I_end >= 0 && crd.J_end < 0)
             {
-                crd.angleEnd = 180.0 - crd.angleEnd;
-                totalDeg = Math.Abs(crd.angleStart) + Math.Abs(crd.angleEnd);
+                if (crd.angleEnd > crd.angleStart)
+                    totalDeg = crd.angleStart - crd.angleEnd;
+                else if (crd.angleEnd < crd.angleStart && crd.angleEnd > -crd.angleStart)
+                    totalDeg = crd.angleEnd + crd.angleStart;
+                else if (crd.angleEnd < -crd.angleStart)
+                    totalDeg = 360 + crd.angleEnd + crd.angleStart;
             }
-            else if (crd.I_end > 0)
+            else if (crd.I_end >= 0 && crd.J_end >= 0)
             {
-                crd.angleEnd = 180.0 - crd.angleEnd;
-                totalDeg = Math.Abs(crd.angleStart) + 180.0 + Math.Abs(crd.angleEnd);
+                totalDeg = crd.angleStart + crd.angleEnd;
             }
-            else
-                totalDeg = Math.Abs(crd.angleStart) + 180.0 + Math.Abs(crd.angleEnd);
+            else if (crd.I_end < 0 && crd.J_end >= 0)
+            {
+                totalDeg = crd.angleStart + crd.angleEnd;
+            }
+            else if (crd.I_end < 0 && crd.J_end < 0)
+            { 
+                totalDeg = 360 + crd.angleEnd + crd.angleStart; 
+            }
 
+            Console.WriteLine("TotalDeg = "+ totalDeg);
             return totalDeg;
         }
 
@@ -227,11 +237,11 @@ namespace CNC_Algos_Test
             g = Graphics.FromImage(DrawArea);
 
 
-            g.DrawLine(grid, 350, 0, 350, 700);
-            g.DrawLine(grid, 0, 350, 700, 350);
+            g.DrawLine(grid, PicBx.Width/2, 0, PicBx.Height/2,PicBx.Height);
+            g.DrawLine(grid, 0, PicBx.Width/2, PicBx.Height, PicBx.Height/2);
             g.DrawLine(p2, crd.XS, crd.YS, crd.XS + 1, crd.YS + 1);
             g.DrawLine(p, (int)crd.XFinnish, (int)crd.YFinnish, (int)crd.XFinnish +1, (int)crd.YFinnish+1);// crd.XC, crd.YC);
-            Result_rTb.AppendText(crd.XFinnish + " : " + crd.YFinnish + " : " + deg_ + " : " + degree + Environment.NewLine);
+            Result_rTb.AppendText(crd.XFinnish + "\t" + crd.YFinnish + "\t" + deg_ + "\t" + degree + Environment.NewLine);
             Result_rTb.ScrollToCaret();
         }
 
