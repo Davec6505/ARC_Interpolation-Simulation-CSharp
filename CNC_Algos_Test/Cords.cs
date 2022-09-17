@@ -53,17 +53,16 @@ namespace CNC_Algos_Test
             rad2deg = 180.0 / Math.PI;
         }
 
-        public void CalcRadius()
+        public double CalcRadius(double i, double j)
         {
-            X = Math.Abs(I);
-            Y = Math.Abs(J);
-            Radius = Math.Sqrt((X*X) + (Y*Y) );
+            return Math.Sqrt((i*i) + (j*j) );
         }
 
-        public void CalcCenter()
+        public void CalcCenter(double xs,double ys,double i,double j)
         {
-            xCenter = XStart + I;
-            yCenter = YStart + J;
+           
+            xCenter = xs + i;
+            yCenter = ys + j;
 
             XC = (int)xCenter;
             YC = (int)yCenter;

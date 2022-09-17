@@ -69,17 +69,20 @@ namespace CNC_Algos_Test
 
         private void CalcValues()
         {
-            crd.CalcRadius();
-            crd.CalcCenter();
+            crd.X = Math.Abs(crd.I);
+            crd.Y = Math.Abs(crd.J);
+            crd.Radius = crd.CalcRadius(crd.X,crd.Y);
+            crd.CalcCenter(crd.XStart,crd.YStart,crd.I,crd.J);
             crd.angleStart    = crd.CalcAngle(crd.X, crd.Y);
             crd.QuadrantStart = crd.GetQuadrantA(crd.I,crd.J);
             crd.Calc_I_J_End();
+            Console.WriteLine($"xFin:= {crd.YFinnish} : yFin:= {crd.YFinnish}");
             crd.QuadrantFin   = crd.GetQuadrantA(crd.I_end, crd.J_end);
             crd.angleEnd      = crd.CalcAngle(crd.I_end, crd.J_end);
             crd.CalcStep();
             crd.GetNextStep();
             Console.WriteLine($"< Radius {crd.Radius} : xCen {crd.xCenter} : yCen {crd.yCenter} " +
-                              $"qStart {crd.QuadrantStart} : qEnd {crd.QuadrantFin} : Iend {crd.I_end} : Jend {crd.J_end} : angS {crd.angleStart} : " +
+                              $"xFin {crd.XFinnish} : yFin {crd.YFinnish} : Iend {crd.I_end} : Jend {crd.J_end} : angS {crd.angleStart} : " +
                               $"angEnd {crd.angleEnd} >");
         }
 
@@ -130,9 +133,6 @@ namespace CNC_Algos_Test
         {
             double temp = 0.00;
             ValuesToUse();
-            //get initial angle from current position to radius center
-
-            Radius_textBox.Text = crd.Radius.ToString();
 
             if (double.TryParse(Xfinnish_textBox.Text, out temp))
                 crd.XFinnish = temp;
